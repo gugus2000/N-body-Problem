@@ -1,0 +1,34 @@
+[ATTENTION, une liste de position contiendra aussi la masse de la planète, en plus de sa ... position xD]
+
+conditions initiales=liste des positions initiales des n planètes
+
+position des planètes=[conditions initiales]
+
+nombre de planètes=taille de conditions initiales
+
+liste de temps = liste de nombre entre 0 et un temps (genre une année) avec un certain pas (1 jour par exemple)
+
+pour le temps dans la liste temps:
+	-positions des planètes à cet instant=[]
+	-pour la_position_de_la_planète dans les positions des planètes au temps d'avant:
+		-somme des forces appliqués  la planète=[résultante sur x=0,résultante sur y=0, résultante sur z=0]
+		-pour i dans la liste des entiers de 0 au nombre de planètes dans cette liste:
+			-si la position de la planète avec la position i est différente de la_position_de_la_planète:
+				-somme des forces appliqués à la planète = somme des forces appliqués à la planète + [résultante en x de la force exercé par la planète à la position i, résultante en y de la force exercé par la planète à la position i, résultante en z de la force exercé par la planète à la position i]
+		-déplacement de la planète=calculer le déplacement de la planète en fonction de toutes ses forces
+		-ajouter à la position des planètes à cet instant: la_position_de_la_planète+le déplacement de la planète
+	-ajouter à la position des planètes la position des planètes à cet instant
+
+(pour faire en plus "python")
+for temps in liste de temps:
+	position des planètes à cet instant=[]
+	for position_planete in position des planètes[-1]:
+		sommes des forces=0
+		for index_positions in range(nombre de planètes):
+			if position_planete==position des planètes[-1][index_positions]:
+				sommes des forces+=calcul des forces exercés par la planète en deuxième position sur la planète en première position(position_planete, position des planètes[-1][index_positions])
+		 déplacement de la planète = calcul de la vitesse à partir de la force(sommes des forces)
+		position des planètes à cet instant.append(position_planete+déplacement de la planète)
+	position des planètes.append(position des planètes à cet instant)
+
+NOTE: Amélioration possible: mettre les masses dans une autre liste, et y accéder différemment, pour éviter de copier à chaque itération la position ET la masse (qui ne changera pas vu qu'on ne prend pas en compte les collisions)
