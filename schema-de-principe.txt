@@ -11,7 +11,7 @@ liste de temps = liste de nombre entre 0 et un temps (genre une année) avec un 
 pour le temps dans la liste temps:
 	-positions des planètes à cet instant=[]
 	-pour la_position_de_la_planète dans les positions des planètes au temps d'avant:
-		-somme des forces appliqués  la planète=[résultante sur x=0,résultante sur y=0, résultante sur z=0]
+		-somme des forces appliqués la planète=[résultante sur x=0,résultante sur y=0, résultante sur z=0]
 		-pour i dans la liste des entiers de 0 au nombre de planètes dans cette liste:
 			-si la position de la planète avec la position i est différente de la_position_de_la_planète:
 				-somme des forces appliqués à la planète = somme des forces appliqués à la planète + [résultante en x de la force exercé par la planète à la position i, résultante en y de la force exercé par la planète à la position i, résultante en z de la force exercé par la planète à la position i]
