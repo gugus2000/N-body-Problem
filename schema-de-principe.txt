@@ -1,4 +1,4 @@
-[ATTENTION, une liste de position contiendra aussi la masse de la planète, en plus de sa ... position xD]
+[ATTENTION, une liste de position contiendra aussi la masse de la planète, sa vitesse, en plus de sa ... position xD]
 
 conditions initiales=liste des positions initiales des n planètes
 
@@ -25,10 +25,11 @@ for temps in liste de temps:
 	for position_planete in position des planètes[-1]:
 		sommes des forces=0
 		for index_positions in range(nombre de planètes):
-			if position_planete==position des planètes[-1][index_positions]:
+			if position_planete!=position des planètes[-1][index_positions]:
 				sommes des forces+=calcul des forces exercés par la planète en deuxième position sur la planète en première position(position_planete, position des planètes[-1][index_positions])
-		 déplacement de la planète = calcul de la vitesse à partir de la force(sommes des forces)
-		position des planètes à cet instant.append(position_planete+déplacement de la planète)
+		 position_planete["vitesse"] += calcul de la vitesse à partir de la force(sommes des forces, masse de la planete, temps)
+         position_planete["x"]+=position_planete["vitesse"][0]*temps
+		position des planètes à cet instant.append(position_planete)
 	position des planètes.append(position des planètes à cet instant)
 
 NOTE: Amélioration possible: mettre les masses dans une autre liste, et y accéder différemment, pour éviter de copier à chaque itération la position ET la masse (qui ne changera pas vu qu'on ne prend pas en compte les collisions)
