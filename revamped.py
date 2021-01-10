@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import celluloid as cel
 
 class Body:
     """A body with enought mass to be considered in the system"""
@@ -108,27 +107,29 @@ class CartesianCoordinate(Coordinate):
         return SphericalCoordinate(r, theta, phi)
 
 C_G=6.67e-11
+C_FILE="SAVE"
 
-Earth=Body('Earth', CartesianCoordinate(150e9, 0, 0), CartesianCoordinate(0, 29.8e3, 0), CartesianCoordinate(0, 0, 0), 6e24, 2.5e6)
-Sun=Body('Sun', CartesianCoordinate(0, 0, 0), CartesianCoordinate(0, 0, 0), CartesianCoordinate(0, 0, 0), 2e30, 696e6)
+Earth=Body('Earth', CartesianCoordinate(150e9, 0, 0), CartesianCoordinate(0, 29.8e3, 0), CartesianCoordinate(0, 0, 0), 6e24, 6.4e6, 3600*24)
+Mercure=Body('Mercure', CartesianCoordinate(28e9, 0, 0), CartesianCoordinate(0, 47e3, 0), CartesianCoordinate(0, 0, 0),3.3e23,2.5e6,3600)
+Venus=Body('Venus', CartesianCoordinate(108e9, 0, 0), CartesianCoordinate(0, 35e3, 0), CartesianCoordinate(0, 0, 0), 4.8e24,6e6,3600*10)
+Mars=Body('Mars', CartesianCoordinate(227e9, 0, 0), CartesianCoordinate(0, 24e3, 0), CartesianCoordinate(0, 0, 0), 5.4e23,3.4e6,3600*30)
+Sun=Body('Sun', CartesianCoordinate(0, 0, 0), CartesianCoordinate(0, 0, 0), CartesianCoordinate(0, 0, 0), 2e30, 696e6, 3600)
 
-bodies=[Earth, Sun]
-temps=np.linspace(0, 2*365.25*3600*24, 1)
+bodies=[Mars, Earth, Venus, Mercure, Sun]
 
-for index_temps in range(1, len(temps)):
+for temps in range(0, int(165*365.25*3600*24), 3600):
     for index_body in range(len(bodies)):
-        if temps[index_temps]%bodies[index_body].step==0: # On regarde si on doit calculer la position de cette planète (pas adaptatif)
+        if temps%bodies[index_body].step==0: # On regarde si on doit calculer la position de cette planète (pas adaptatif)
             force=bodies[index_body].getForce(bodies)
             bodies[index_body].applyForce(force)
 
+np.save(C_FILE, np.array(bodies))
+
 fig=plt.figure()
 ax=fig.add_subplot(1,1,1)
-camera=cel.Camera(fig)
-for date in range(len(bodies[0].trajectory)):
-    plt.scatter([body.trajectory[date][0] for body in bodies], [body.trajectory[date][1] for body in bodies])
-    camera.snap()
-anim=camera.animate(blit=True)
-anim.save('test.mp4')
+for body in bodies:
+    plt.plot([body.trajectory[date][0] for date in range(len(body.trajectory))], [body.trajectory[date][1] for date in range(len(body.trajectory))])
+plt.show()
 
 """
 for index_body in range(len(bodies)):
