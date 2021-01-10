@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import celluloid as cel
 
 class Body:
     """A body with enought mass to be considered in the system"""
-    def __init__(self, name, position, speed, acceleration, mass, radius):
+    def __init__(self, name, position, speed, acceleration, mass, radius, step):
         self.name=name
         self.position=position
         self.speed=speed
@@ -11,6 +12,7 @@ class Body:
         self.mass=mass
         self.radius=radius
         self.trajectory=[self.position.saveAsPartTrajectory()]
+        self.step=step
 
     def getForce(self, bodies):
         force=CartesianCoordinate(0, 0, 0)
@@ -21,11 +23,11 @@ class Body:
                 force+=SphericalCoordinate(-C_G*(body.mass*self.mass)/(coordinate.first**2), coordinate.second, coordinate.third)
         return force
 
-    def applyForce(self, force, time_step):
+    def applyForce(self, force):
         self.trajectory.append(self.position.saveAsPartTrajectory())
         self.acceleration=force/self.mass # First Principle
-        self.speed+=self.acceleration*time_step
-        self.position+=self.speed*time_step
+        self.speed+=self.acceleration*self.step
+        self.position+=self.speed*self.step
 
 class Coordinate:
     """A 3D coordinate"""
@@ -111,16 +113,25 @@ Earth=Body('Earth', CartesianCoordinate(150e9, 0, 0), CartesianCoordinate(0, 29.
 Sun=Body('Sun', CartesianCoordinate(0, 0, 0), CartesianCoordinate(0, 0, 0), CartesianCoordinate(0, 0, 0), 2e30, 696e6)
 
 bodies=[Earth, Sun]
-temps=np.linspace(0, 2*365.25*3600*24, 10000)
+temps=np.linspace(0, 2*365.25*3600*24, 1)
 
 for index_temps in range(1, len(temps)):
-    forces=[]
     for index_body in range(len(bodies)):
-        forces.append(bodies[index_body].getForce(bodies))
-    for index_body in range(len(bodies)):
-        bodies[index_body].applyForce(forces[index_body], temps[index_temps]-temps[index_temps-1])
+        if temps[index_temps]%bodies[index_body].step==0: # On regarde si on doit calculer la position de cette planète (pas adaptatif)
+            force=bodies[index_body].getForce(bodies)
+            bodies[index_body].applyForce(force)
 
+fig=plt.figure()
+ax=fig.add_subplot(1,1,1)
+camera=cel.Camera(fig)
+for date in range(len(bodies[0].trajectory)):
+    plt.scatter([body.trajectory[date][0] for body in bodies], [body.trajectory[date][1] for body in bodies])
+    camera.snap()
+anim=camera.animate(blit=True)
+anim.save('test.mp4')
+
+"""
 for index_body in range(len(bodies)):
     plt.plot([position[0] for position in bodies[index_body].trajectory], [position[1] for position in bodies[index_body].trajectory])
 plt.show()
-
+"""
