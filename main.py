@@ -63,6 +63,54 @@ mars={
         'z': 0,
     }
 }
+jupiter={
+    'x':778e9,
+    'y':0,
+    'z':0,
+    'masse':1.9e27,
+    'rayon':70e6,
+    'vitesse': {
+        'x':0,
+        'y':13e3,
+        'z':0,
+    }
+}
+saturne={
+    'x':1.4e12,
+    'y':0,
+    'z':0,
+    'masse':568e24,
+    'rayon':60e6,
+    'vitesse': {
+        'x':0,
+        'y':9.6e3,
+        'z':0,
+    }
+}
+uranus={
+    'x':2.9e12,
+    'y':0,
+    'z':0,
+    'masse':8.7e25,
+    'rayon':25.6e6,
+    'vitesse': {
+        'x':0,
+        'y':6.8e3,
+        'z':0,
+    }
+}
+neptune={
+    'x':4.5e12,
+    'y':0,
+    'z':0,
+    'masse':102e24,
+    'rayon':24.8e6,
+    'vitesse': {
+        'x':0,
+        'y':5.4e3,
+        'z':0,
+    }
+}
 
 def cartesian2spheric(x, y, z):
     """Transforme une coordonnée cartésienne en coordonnée sphérique"""
@@ -104,13 +152,13 @@ calculVitesse=lambda force, masse, periode: {
     'z': (force['z']/masse)*periode,
 }
 
-conditions_initiales = [soleil, mercure, venus, terre]
+conditions_initiales = [soleil, mercure, venus, terre, mars, jupiter, saturne, uranus, neptune]
 nb_corps = len(conditions_initiales) # nombre de corps étudié dans le système
 positions_corps = [conditions_initiales]
 # mise en place du temps
 temps_initial = 0 # s
-temps_final = 2*365.25*3600*24 # s
-pas_temps = 3600*24 # en d# s
+temps_final = 165*365.25*3600*24 # s
+pas_temps = 3600 # en d# s
 
 intervalle = temps_final - temps_initial
 num_points = int(intervalle / pas_temps) + 1   # nombre d'éléments
